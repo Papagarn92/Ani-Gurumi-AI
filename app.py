@@ -233,6 +233,53 @@ def pattern_json_to_markdown(data):
         
     return md
 
+def generate_round_counter(step_text):
+    """
+    Parses step text for round ranges (e.g. "Rnd 5-10") and returns 
+    a formatted HTML string of numbers for tracking.
+    """
+    # Regex to find ranges like "Rnd 5-10", "Row 5-10", "R 5-10", "Varv 5-10"
+    # Case insensitive, handles optional spaces
+    match = re.search(r'(?:Rnd|Row|R|Varv|Round)\s*(\d+)\s*-\s*(\d+)', step_text, re.IGNORECASE)
+    
+    if match:
+        try:
+            start = int(match.group(1))
+            end = int(match.group(2))
+            
+            # Only generate if it's a valid range and not too huge (prevent UI clutter)
+            if start < end and (end - start) < 50: 
+                numbers = []
+                count = 0
+                for i in range(start, end + 1):
+                    numbers.append(str(i))
+                    count += 1
+                    # Add separator every 5 numbers, but not at the very end
+                    if count % 5 == 0 and i != end:
+                        numbers.append("|")
+                
+                # Join with non-breaking spaces for layout
+                # Using CSS for spacing might be cleaner, but &nbsp; is robust for Streamlit markdown
+                formatted_str = "&nbsp;&nbsp;".join(numbers)
+                
+                # Wrap in a styled div
+                return f"""
+                <div style="
+                    margin-left: 20px; 
+                    margin-bottom: 10px; 
+                    font-family: monospace; 
+                    color: #00e5ff; 
+                    font-weight: bold;
+                    font-size: 1.1em;
+                ">
+                    {formatted_str}
+                </div>
+                """
+        except:
+            pass
+            
+    return None
+
 def render_interactive_pattern(data):
     """Renders the pattern as an interactive Quest Log."""
     st.markdown(f"## 🛡️ Quest: {data.get('project_name', 'Unknown Project')}")
@@ -263,6 +310,11 @@ def render_interactive_pattern(data):
             # Checkboxes for each round
             for j, step in enumerate(comp.get('steps', [])):
                 st.checkbox(step, key=f"step_{i}_{j}")
+                
+                # Round Counter Logic
+                counter_html = generate_round_counter(step)
+                if counter_html:
+                    st.markdown(counter_html, unsafe_allow_html=True)
     
     st.success("Don't forget to check off steps as you go! ✅")
 
