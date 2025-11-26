@@ -648,6 +648,15 @@ def main():
                     - inc = increase
                     - dec = decrease
                     - MR = Magic Ring
+                    
+                    **IMPORTANT RULES:**
+                    1. **ORIENTATION:** For EACH component, you MUST specify the direction.
+                       - Example: "Head (Worked top-down. MR is the top)."
+                       - If sewing is needed, write: "Leave a long tail for sewing."
+                    2. **LANDMARKS:** For the Head, you MUST specify where to place safety eyes.
+                       - Example: "Tip: Insert safety eyes between R10 and R11, 6 stitches apart."
+                    3. **ASSEMBLY:** Be specific about placement.
+                       - Example: "Sew the body (neck opening) to the bottom of the head (R20)."
                     - ch = chain
                     - sl st = slip stitch
                     - R = Round
@@ -721,6 +730,11 @@ def main():
                     2. Keep the structure EXACTLY the same (keys: project_name, difficulty, materials, hybrid_suggestion, components).
                     3. Only change what is requested.
                     4. Output the valid JSON object.
+                    
+                    **REMEMBER THE RULES:**
+                    - **ORIENTATION:** Specify direction (e.g., top-down) and sewing tails.
+                    - **LANDMARKS:** Specify eye placement (e.g., between R10-11).
+                    - **ASSEMBLY:** Be specific about alignment.
                     """
                     
                     response = model.generate_content(edit_prompt)
