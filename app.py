@@ -657,6 +657,12 @@ def main():
                        - Example: "Tip: Insert safety eyes between R10 and R11, 6 stitches apart."
                     3. **ASSEMBLY:** Be specific about placement.
                        - Example: "Sew the body (neck opening) to the bottom of the head (R20)."
+                    4. **COLOR RULES:**
+                       - **START COLOR:** The FIRST instruction for EVERY component MUST specify the color.
+                         - Example: "Start with SKIN COLOR yarn."
+                       - **COLOR CHANGES:** If color changes, write it as a separate step.
+                         - Example: "Change to BLACK yarn."
+                       - **SPECIFICITY:** Use descriptive names based on the image (e.g., "Dark Blue", "Lime Green"), not just "Color A".
                     - ch = chain
                     - sl st = slip stitch
                     - R = Round
@@ -735,6 +741,7 @@ def main():
                     - **ORIENTATION:** Specify direction (e.g., top-down) and sewing tails.
                     - **LANDMARKS:** Specify eye placement (e.g., between R10-11).
                     - **ASSEMBLY:** Be specific about alignment.
+                    - **COLORS:** Mention start colors and specific color names.
                     """
                     
                     response = model.generate_content(edit_prompt)
