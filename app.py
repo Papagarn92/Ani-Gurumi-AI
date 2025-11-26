@@ -246,9 +246,9 @@ def get_round_counter_text(step_text):
     Parses step text for round ranges and returns a plain text string of numbers.
     Returns None if no range found.
     """
-    # Regex to find ranges like "Rnd 5-10", "Rnds 5-10", "Row 5-10", "R 5-10", "Varv 5-10"
-    # Case insensitive, handles optional spaces, dots, plurals, and different separators
-    match = re.search(r'(?:Rnds?|Rows?|Rs?|Varv|Rounds?)\.?\s*(\d+)\s*(?:-|–|to)\s*(\d+)', step_text, re.IGNORECASE)
+    # Regex to find ranges like "Rnd 5-10", "Rnds 5-10", "Row 5-10", "R 5-10", "Varv 5-10", "R8-R14"
+    # Case insensitive, handles optional spaces, dots, plurals, different separators, and repeated prefixes
+    match = re.search(r'(?:Rnds?|Rows?|Rs?|Varv|Rounds?)\.?\s*(\d+)\s*(?:-|–|to)\s*(?:(?:Rnds?|Rows?|Rs?|Varv|Rounds?)\.?\s*)?(\d+)', step_text, re.IGNORECASE)
     
     if match:
         try:
