@@ -151,10 +151,27 @@ def create_pdf(text, image_file, title="Crochet Pattern"):
             pdf.set_font("Arial", '', 12)
             pdf.set_x(15) 
             pdf.multi_cell(0, 6, clean_line)
+            
+            # Check for round counter
+            counter_text = get_round_counter_text(clean_line)
+            if counter_text:
+                pdf.set_font("Courier", 'B', 12) # Monospace for alignment
+                pdf.set_x(20) # Indent
+                pdf.cell(0, 6, counter_text, 0, 1)
+                pdf.ln(2)
+
         elif re.match(r'^\d+\.', line.strip()):
             pdf.set_font("Arial", '', 12)
             pdf.set_x(15)
             pdf.multi_cell(0, 6, clean_line)
+            
+            # Check for round counter
+            counter_text = get_round_counter_text(clean_line)
+            if counter_text:
+                pdf.set_font("Courier", 'B', 12) # Monospace for alignment
+                pdf.set_x(20) # Indent
+                pdf.cell(0, 6, counter_text, 0, 1)
+                pdf.ln(2)
         else:
             pdf.set_font("Arial", '', 12)
             pdf.multi_cell(0, 6, clean_line)
