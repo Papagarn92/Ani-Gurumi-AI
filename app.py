@@ -680,6 +680,51 @@ def main():
         # Render interactively
         render_interactive_pattern(st.session_state['pattern_data'])
         
+        # --- PATTERN EDITING ---
+        st.markdown("---")
+        st.markdown("### ✍️ Edit Pattern")
+        
+        edit_instruction = st.chat_input("Do you want to change something in the pattern? (e.g. 'Make the arms longer')")
+        
+        if edit_instruction:
+            if not api_key:
+                 st.error("⚠️ Missing API Key")
+                 st.stop()
+                 
+            with st.spinner("🧶 Anigurobo is adjusting the pattern..."):
+                try:
+                    genai.configure(api_key=api_key)
+                    model = genai.GenerativeModel(selected_model_name, generation_config={"response_mime_type": "application/json"})
+                    
+                    current_pattern = json.dumps(st.session_state['pattern_data'])
+                    
+                    edit_prompt = f"""
+                    You are an expert Amigurumi pattern editor.
+                    
+                    Current Pattern (JSON):
+                    {current_pattern}
+                    
+                    User Request: "{edit_instruction}"
+                    
+                    INSTRUCTIONS:
+                    1. Update the JSON data based on the user's request.
+                    2. Keep the structure EXACTLY the same (keys: project_name, difficulty, materials, hybrid_suggestion, components).
+                    3. Only change what is requested.
+                    4. Output the valid JSON object.
+                    """
+                    
+                    response = model.generate_content(edit_prompt)
+                    
+                    new_pattern_data = json.loads(response.text)
+                    st.session_state['pattern_data'] = new_pattern_data
+                    st.session_state['generated_pattern'] = pattern_json_to_markdown(new_pattern_data)
+                    
+                    st.success("Pattern updated!")
+                    st.rerun()
+                    
+                except Exception as e:
+                    st.error(f"Failed to update pattern: {e}")
+
         st.markdown("### 💾 Save & Export")
         
         col_save, col_pdf = st.columns(2)
