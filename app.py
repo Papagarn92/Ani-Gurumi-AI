@@ -19,6 +19,16 @@ load_dotenv()
 # Configure page title and icon
 st.set_page_config(page_title="Ani-Gurumi AI", page_icon="🧶", layout="wide")
 
+# --- ANALYTICS ---
+try:
+    if "UMAMI_SCRIPT_URL" in st.secrets and "UMAMI_WEBSITE_ID" in st.secrets:
+        script_url = st.secrets["UMAMI_SCRIPT_URL"]
+        website_id = st.secrets["UMAMI_WEBSITE_ID"]
+        analytics_script = f'<script defer src="{script_url}" data-website-id="{website_id}"></script>'
+        components.html(analytics_script, height=0, width=0)
+except Exception:
+    pass # Fail silently if secrets are missing or other errors occur
+
 # Create folder for saved patterns if it doesn't exist
 SAVE_DIR = "inventory"
 if not os.path.exists(SAVE_DIR):
