@@ -64,7 +64,7 @@ class PDF(FPDF):
                 pass
 
         self.set_font('Arial', 'B', 24)
-        self.ln(40) # Move down (past logo)
+        self.ln(30) # Move down (past logo)
         
         # Title
         try:
@@ -72,21 +72,21 @@ class PDF(FPDF):
         except:
             safe_title = "Crochet Pattern"
         self.cell(0, 10, safe_title, 0, 1, 'C')
-        self.ln(20)
+        self.ln(10)
         
         # Image
         if image_path:
             try:
                 # Center image (A4 width 210mm)
-                # Image width 100mm
-                x_pos = (210 - 100) / 2
-                self.image(image_path, x=x_pos, w=100)
+                # Image width 70mm (smaller to fit tall images)
+                x_pos = (210 - 70) / 2
+                self.image(image_path, x=x_pos, w=70)
             except:
                 pass
         
         self.ln(20)
         self.set_font('Arial', '', 14)
-        self.cell(0, 10, "Created with Ani-Gurumi AI", 0, 1, 'C')
+        self.cell(0, 10, "Created by Ani-Gurumi AI", 0, 1, 'C')
         self.add_page() # New page for text
 
 def clean_text(text):
