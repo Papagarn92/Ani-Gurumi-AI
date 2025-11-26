@@ -438,37 +438,8 @@ def main():
         st.sidebar.info("Please add `GEMINI_API_KEY` to your Streamlit secrets.")
         st.stop()
 
-    # Model Selection
-    st.sidebar.markdown("### AI Model")
-    selected_model_name = "models/gemini-2.0-flash"
-    
-    if api_key:
-        try:
-            genai.configure(api_key=api_key)
-            available_models = []
-            try:
-                for m in genai.list_models():
-                    if 'generateContent' in m.supported_generation_methods:
-                        available_models.append(m.name)
-            except:
-                pass
-            
-            if available_models:
-                default_index = 0
-                flash_2_0_stable = next((m for m in available_models if m.endswith("gemini-2.0-flash")), None)
-                flash_2_0_exp = next((m for m in available_models if "gemini-2.0-flash" in m), None)
-                flash_1_5 = next((m for m in available_models if "gemini-1.5-flash" in m), None)
-                
-                if flash_2_0_stable:
-                    default_index = available_models.index(flash_2_0_stable)
-                elif flash_2_0_exp:
-                    default_index = available_models.index(flash_2_0_exp)
-                elif flash_1_5:
-                    default_index = available_models.index(flash_1_5)
-                
-                selected_model_name = st.sidebar.selectbox("Select Model", available_models, index=default_index)
-        except:
-            pass
+    # Model Selection (Hardcoded)
+    selected_model_name = "gemini-2.0-flash"
 
     # Inventory System (Load)
     st.sidebar.markdown("---")
