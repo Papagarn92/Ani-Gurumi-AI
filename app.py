@@ -158,6 +158,14 @@ def create_pdf(text, image_file, title="Crochet Pattern"):
         else:
             pdf.set_font("Arial", '', 12)
             pdf.multi_cell(0, 6, clean_line)
+            
+            # Check for round counter
+            counter_text = get_round_counter_text(clean_line)
+            if counter_text:
+                pdf.set_font("Courier", 'B', 12) # Monospace for alignment
+                pdf.set_x(20) # Indent
+                pdf.cell(0, 6, counter_text, 0, 1)
+                pdf.ln(2)
 
     output = pdf.output(dest='S').encode('latin-1')
     
@@ -233,21 +241,21 @@ def pattern_json_to_markdown(data):
         
     return md
 
-def generate_round_counter(step_text):
+def get_round_counter_text(step_text):
     """
-    Parses step text for round ranges (e.g. "Rnd 5-10") and returns 
-    a formatted HTML string of numbers for tracking.
+    Parses step text for round ranges and returns a plain text string of numbers.
+    Returns None if no range found.
     """
-    # Regex to find ranges like "Rnd 5-10", "Row 5-10", "R 5-10", "Varv 5-10"
-    # Case insensitive, handles optional spaces
-    match = re.search(r'(?:Rnd|Row|R|Varv|Round)\s*(\d+)\s*-\s*(\d+)', step_text, re.IGNORECASE)
+    # Regex to find ranges like "Rnd 5-10", "Rnds 5-10", "Row 5-10", "R 5-10", "Varv 5-10"
+    # Case insensitive, handles optional spaces, dots, plurals, and different separators
+    match = re.search(r'(?:Rnds?|Rows?|Rs?|Varv|Rounds?)\.?\s*(\d+)\s*(?:-|–|to)\s*(\d+)', step_text, re.IGNORECASE)
     
     if match:
         try:
             start = int(match.group(1))
             end = int(match.group(2))
             
-            # Only generate if it's a valid range and not too huge (prevent UI clutter)
+            # Only generate if it's a valid range and not too huge
             if start < end and (end - start) < 50: 
                 numbers = []
                 count = 0
@@ -258,26 +266,32 @@ def generate_round_counter(step_text):
                     if count % 5 == 0 and i != end:
                         numbers.append("|")
                 
-                # Join with non-breaking spaces for layout
-                # Using CSS for spacing might be cleaner, but &nbsp; is robust for Streamlit markdown
-                formatted_str = "&nbsp;&nbsp;".join(numbers)
-                
-                # Wrap in a styled div
-                return f"""
-                <div style="
-                    margin-left: 20px; 
-                    margin-bottom: 10px; 
-                    font-family: monospace; 
-                    color: #00e5ff; 
-                    font-weight: bold;
-                    font-size: 1.1em;
-                ">
-                    {formatted_str}
-                </div>
-                """
+                return " ".join(numbers)
         except:
             pass
-            
+    return None
+
+def generate_round_counter(step_text):
+    """
+    Returns formatted HTML string for the UI round counter.
+    """
+    text = get_round_counter_text(step_text)
+    if text:
+        # Add extra spacing for HTML display
+        formatted_str = text.replace(" ", "&nbsp;&nbsp;")
+        
+        return f"""
+        <div style="
+            margin-left: 20px; 
+            margin-bottom: 10px; 
+            font-family: monospace; 
+            color: #00e5ff; 
+            font-weight: bold;
+            font-size: 1.1em;
+        ">
+            {formatted_str}
+        </div>
+        """
     return None
 
 def render_interactive_pattern(data):
