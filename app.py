@@ -349,6 +349,24 @@ def render_interactive_pattern(data):
     
     st.success("Don't forget to check off steps as you go! ✅")
 
+@st.dialog("Welcome to Ani-Gurumi AI! 🧶✨")
+def show_help():
+    st.markdown("""
+    ### The Purpose
+    This app uses AI to turn images of anime characters (or your kids' drawings!) into Amigurumi crochet patterns. Just upload a photo, and the AI handles the math.
+
+    ### Interface Guide 🖥️
+    - **📸 Upload/Camera:** Take a photo of a screen or drawing, or upload an image file.
+    - **💾 Inventory:** Save your generated patterns here to finish them later.
+    - **💬 Pattern Editor:** Not happy with the result? Chat with the AI below the pattern (e.g., 'Make the arms longer') to adjust it instantly.
+
+    ### What is Hybrid Mode? ⚔️
+    Hybrid Mode combines soft yarn with hard 3D prints! If checked, the AI suggests parts (like swords, masks, or armor) that are better suited for 3D printing and provides a search link for the STL files.
+
+    ### The Row Tracker 🔢
+    For long sections (e.g., 'Rounds 8-15'), the app automatically groups the numbers by 5 (e.g., **8 9 10 11 12 | 13...**) so you can easily track your progress on paper.
+    """)
+
 def main():
     # --- SIDEBAR ---
     
@@ -518,6 +536,10 @@ def main():
             )
 
     st.sidebar.title("Settings ⚙️")
+    
+    # Help Button
+    if st.sidebar.button("❓ How it works"):
+        show_help()
     
     # API Key Management
     try:
