@@ -357,15 +357,30 @@ def show_help():
 
     ### Interface Guide 🖥️
     - **📸 Upload/Camera:** Take a photo of a screen or drawing, or upload an image file.
+    """)
+    if os.path.exists("help_upload.png"):
+        st.image("help_upload.png", use_container_width=True)
+        
+    st.markdown("""
     - **💾 Inventory:** Save your generated patterns here to finish them later.
     - **💬 Pattern Editor:** Not happy with the result? Chat with the AI below the pattern (e.g., 'Make the arms longer') to adjust it instantly.
+    """)
+    if os.path.exists("help_chat.png"):
+        st.image("help_chat.png", use_container_width=True)
 
+    st.markdown("""
     ### What is Hybrid Mode? ⚔️
     Hybrid Mode combines soft yarn with hard 3D prints! If checked, the AI suggests parts (like swords, masks, or armor) that are better suited for 3D printing and provides a search link for the STL files.
+    """)
+    if os.path.exists("help_hybrid.png"):
+        st.image("help_hybrid.png", use_container_width=True)
 
+    st.markdown("""
     ### The Row Tracker 🔢
     For long sections (e.g., 'Rounds 8-15'), the app automatically groups the numbers by 5 (e.g., **8 9 10 11 12 | 13...**) so you can easily track your progress on paper.
     """)
+    if os.path.exists("help_pattern.png"):
+        st.image("help_pattern.png", use_container_width=True)
 
 def main():
     # --- SIDEBAR ---
